@@ -1,0 +1,23 @@
+<div class="threads-wrapper">
+    <mat-card class="box" *ngFor="let thread of threadsData">
+        <mat-card-header>
+        <mat-card-title>{{'From: ' + thread.UserID}}</mat-card-title>
+        <div class="thread-text">
+            {{thread.Text}}
+        </div>
+
+        <div class="comment-text" *ngFor="let comment of thread.comments">
+            {{comment.Text}}
+        </div>
+        </mat-card-header>
+    
+        <form #threadForm="ngForm" class="thread-form" (ngSubmit)="addComment(threadForm)">
+          <mat-card-content>
+            <mat-form-field class="thread-full-width">
+              <input matInput name="comment" placeholder="Comment" ngModel>
+            </mat-form-field>
+          </mat-card-content>
+          <button mat-stroked-button color="accent" class="btn-block" type="submit">Submit</button>
+        </form>
+      </mat-card>
+</div>
