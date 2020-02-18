@@ -24,6 +24,7 @@ async function getThreadsAndComments() {
         try {
             const pool = await poolPromise;
             const getThreads = new sql.Request(pool);
+            //Probobly paging will be more efficient here
             getThreads.query('select * from Threads', (err, result) => {
                     if (err) {
                         throw err;
@@ -36,11 +37,13 @@ async function getThreadsAndComments() {
                             threadsMap[thread.ID].comments = [];
                         }); 
                         const getComments = new sql.Request(pool);
+                        //Probobly paging will be more efficient here
                         getComments.query('select * from Comments', (err, result) => {
                             if (err) {
                                 throw err;
                             }
                             if (result.recordset) {
+                                //Nesting the comments inside the threads array, so that the client will have all the data orginized
                                 result.recordset.forEach((comment) => {
                                     threadsMap[comment.ThreadID].comments.push(comment);
                                 }); 

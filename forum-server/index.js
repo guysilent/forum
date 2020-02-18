@@ -12,12 +12,15 @@ const {wss} = require('./ws/ws');
 let app = express();
 
 app.use(bodyParser.json());
+//Serve client
 app.use(express.static(path.join(__dirname,'forum-client')));
 
+//API Routes
 app.use('/api/Users', userRoutes);
 app.use('/api/Thread', threadRoutes);
 app.use('/api/Comment', commentRoutes);
 
+//Websocket connection
 wss.on('connection', async (ws) => {
     console.log('Client connected to ws');
     const data = await getThreadsAndComments();

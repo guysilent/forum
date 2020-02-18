@@ -19,6 +19,7 @@ router.post('/', async (req, res) => {
                     throw err;
                 }
                 if (result.rowsAffected.length > 0) {
+                    //Data updated, we need to alert all clients
                     broadcastForumUpdate();
                     res.status(200);
                     res.send({'message': "SUCCESS"});
