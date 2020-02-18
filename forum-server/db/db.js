@@ -1,5 +1,6 @@
 const sql = require('mssql')
 const config = require('./dbConfig');
+const {wss, WebSocket} = require('../ws/ws');
 
 const poolPromise = new sql.ConnectionPool(config)
   .connect()
@@ -8,6 +9,15 @@ const poolPromise = new sql.ConnectionPool(config)
     return pool
   })
   .catch(err => console.log('Database Connection Failed! Bad Config: ', err))
+
+async function broadcastForumUpdate() {
+    const data = await getThreadsAndComments();
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(data));
+        }
+    })
+}
 
 async function getThreadsAndComments() {
     return new Promise(async (resolve, reject) => {
@@ -58,5 +68,5 @@ async function getThreadsAndComments() {
 }
 
 module.exports = {
-  sql, poolPromise, getThreadsAndComments
+  sql, poolPromise, getThreadsAndComments, broadcastForumUpdate
 }

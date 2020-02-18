@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   }
 
   submit(form) {
-    console.log(form.value.userName);
+    this.dataService.userName = form.value.userName;
     this.http.post('api/Users', {userName: form.value.userName}).subscribe(response => {
       console.log(response);
       this.dataService.userID = response['ID'];

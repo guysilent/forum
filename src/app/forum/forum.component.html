@@ -1,23 +1,33 @@
 <div class="threads-wrapper">
-    <mat-card class="box" *ngFor="let thread of threadsData">
+    <mat-card class="box" *ngFor="let thread of threadsData; index as threadNumber">
         <mat-card-header>
-        <mat-card-title>{{'From: ' + thread.UserID}}</mat-card-title>
-        <div class="thread-text">
-            {{thread.Text}}
-        </div>
-
-        <div class="comment-text" *ngFor="let comment of thread.comments">
-            {{comment.Text}}
-        </div>
+            <mat-card-title>{{'From: ' + thread.Username}}</mat-card-title>
+            <div class="thread-time">
+                {{thread.Timestamp}}
+            </div>
+            <div class="thread-text">
+                {{thread.Text}}
+            </div>
+            
         </mat-card-header>
-    
-        <form #threadForm="ngForm" class="thread-form" (ngSubmit)="addComment(threadForm)">
+        <div class="comment-text" *ngFor="let comment of thread.comments">
+            {{comment.Username + ': ' + comment.Text + '|   ' + comment.Timestamp}}
+        </div>
+        <form #commentForm="ngForm" class="comment-form" (ngSubmit)="addComment(commentForm, threadNumber)">
           <mat-card-content>
             <mat-form-field class="thread-full-width">
               <input matInput name="comment" placeholder="Comment" ngModel>
             </mat-form-field>
           </mat-card-content>
-          <button mat-stroked-button color="accent" class="btn-block" type="submit">Submit</button>
+          <button mat-stroked-button  class="btn-block" type="submit">Submit</button>
         </form>
       </mat-card>
+      <form #threadForm="ngForm" class="thread-form" (ngSubmit)="addThread(threadForm)">
+        <mat-card-content>
+          <mat-form-field class="thread-full-width">
+            <input matInput name="thread" placeholder="New Thread" ngModel>
+          </mat-form-field>
+        </mat-card-content>
+        <button mat-stroked-button  class="btn-block" type="submit">Submit</button>
+    </form>
 </div>

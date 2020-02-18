@@ -1,13 +1,13 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const path = require ('path');
-const WebSocket = require('ws');
 
 const userRoutes = require('./routes/users');
 const threadRoutes = require('./routes/thread');
 const commentRoutes = require('./routes/comments');
 
 const { getThreadsAndComments } = require('./db/db');
+const {wss} = require('./ws/ws');
 
 let app = express();
 
@@ -17,8 +17,6 @@ app.use(express.static(path.join(__dirname,'forum-client')));
 app.use('/api/Users', userRoutes);
 app.use('/api/Thread', threadRoutes);
 app.use('/api/Comment', commentRoutes);
-
-const wss = new WebSocket.Server({port: 3001});
 
 wss.on('connection', async (ws) => {
     console.log('Client connected to ws');
